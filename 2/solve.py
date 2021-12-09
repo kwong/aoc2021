@@ -63,15 +63,14 @@ def parse_data(data):
     depth_increase = 0
     aim = 0
     for i in range(len(data)):
-
         command = data[i].split(" ")[0]
         value = int(data[i].split(" ")[1])
         if command == "forward":
             horizontal_moves.append(value)
             depth_increase += aim * value
         elif command == "up":
-            vertical_moves.append(value * -1)
-            aim = aim + (value * -1)
+            vertical_moves.append(-value)
+            aim = aim + (-value)
         else:  # going down
             vertical_moves.append(value)
             aim = aim + value
@@ -84,10 +83,10 @@ with open("./input.txt", "r") as f:
     content = f.readlines()
     horizontal_moves, vertical_moves, depth_increase = parse_data(content)
 
+    # 1
     horizontal_position = sum(horizontal_moves)
     vertical_position = sum(vertical_moves)
 
-    # 1
     print(f"1) horizontal position: {horizontal_position}")
     print(f"1) vertical position: {vertical_position}")
     print(f"1) final position: {horizontal_position * vertical_position}")
