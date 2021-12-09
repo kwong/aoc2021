@@ -5,16 +5,13 @@ import sys
 
 
 def islowest(X, i, j):
-    # X[i][j]
-
     u = int(X[i - 1][j]) if i > 0 else sys.maxsize
     d = int(X[i + 1][j]) if i < (len(X) - 1) else sys.maxsize
     r = int(X[i][j + 1]) if j < (len(X[0]) - 1) else sys.maxsize
     l = int(X[i][j - 1]) if j > 0 else sys.maxsize
+    c = int(X[i][j])
 
-    return (
-        int(X[i][j]) < u and int(X[i][j]) < d and int(X[i][j]) < l and int(X[i][j]) < r
-    )
+    return c < u and c < d and c < l and c < r
 
 
 def find_higher(X, i, j, found):
@@ -22,8 +19,8 @@ def find_higher(X, i, j, found):
     d = int(X[i + 1][j]) if i < (len(X) - 1) else 9
     r = int(X[i][j + 1]) if j < (len(X[0]) - 1) else 9
     l = int(X[i][j - 1]) if j > 0 else 9
-
     c = int(X[i][j])
+
     if c == 9 or ((i, j) in found):
         return
 
@@ -41,19 +38,15 @@ def find_higher(X, i, j, found):
         find_higher(X, i, j - 1, found)
 
 
-X = []
-for x in data.splitlines():
-    X.append(x)
+X = [x for x in data.splitlines()]
 
 found = []
 for i in range(len(X)):
     for j in range(len(X[0])):
         if islowest(X, i, j):
-            # print(f"{X[i][j]} is lowest")
             f = []
             find_higher(X, i, j, f)
             found.append(len(f))
 
-# print(sum)
 found = sorted(found)
 print(found[-1] * found[-2] * found[-3])
