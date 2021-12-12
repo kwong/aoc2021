@@ -18,8 +18,6 @@ for line in data.splitlines():
         else:
             graph[v2] = [v1]
 
-print(graph)
-
 visited = set()
 paths = []
 
@@ -29,41 +27,27 @@ def prettyprint(X):
         print(x, "\n")
 
 
-C = defaultdict()
 C = {x: 0 for x in graph.keys() if x.islower()}
-C["end"] = 0
-C["start"] = 0
-print(C)
 
 
 def dfs(visited, graph, vertex, path=[], cc=C):
     try:
-        # if big cave, just append
-        # if small cave, if we already visited an island twice,
-        #   if cave to be added already visited twice, don't append
-        #   else cave is not the one we visited twice before, so we append and add to visited
-        # if small cave and we have no visited any island twice
-        #   add path and increase count
-        # another small cave already visited twice
         max_c = max(cc.values())
-        # print(max_c, cc)
         if vertex.isupper():
             path.append(vertex)
 
-        if vertex == "start" and cc["start"] == 1:
-            visited.add(vertex)
+        if vertex == "start" and cc[vertex] == 1:
             return
 
-        if vertex == "end" and cc["end"] == 1:
-            visited.add(vertex)
+        if vertex == "end":
+            paths.append(path)
             return
 
-        if vertex.islower() and max_c == 2:
-            # print("lower", vertex)
-            if cc[vertex] == 0:
+        if vertex.islower() and max_c >= 2:  # already visited a small cave twice
+            if cc[vertex] == 0:  # new visit
                 cc[vertex] += 1
                 path.append(vertex)
-            else:
+            else:  # visited twice
                 visited.add(vertex)
                 return
 
@@ -71,8 +55,6 @@ def dfs(visited, graph, vertex, path=[], cc=C):
             cc[vertex] += 1
             path.append(vertex)
 
-        if vertex == "end":
-            paths.append(path)
         for neighbor in graph[vertex]:
             # print("v=", vertex, "n=", neighbor, "graph=", graph[vertex], path)
             if neighbor not in visited:
@@ -82,5 +64,5 @@ def dfs(visited, graph, vertex, path=[], cc=C):
 
 
 dfs(visited, graph, "start")
-prettyprint(paths)
+# prettyprint(paths)
 print(len(paths))
